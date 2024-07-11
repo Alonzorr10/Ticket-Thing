@@ -1,7 +1,30 @@
 .h1{
     font-style: normal;
     font-weight: bold;
+    text-align: center;
 }
 .p{
     font-style: italic;
+    margin: auto;
+    text-align: center;
+}
+.tabs{
+  color: black;
+  display: none;
+  padding: 50px;
+  text-align: center;
+}
+.link{
+  background-color: #555;
+  color: white;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  font-size: 17px;
+  width: 25%;
+}
+.link:hover{
+    background-color: #777;
 }
