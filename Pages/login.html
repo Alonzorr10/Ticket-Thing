@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel = "stylesheet" href="/CSS/login.css">
+    <title>Login</title>
+    <style>
+        .error { color: red; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class = "form">
+    <p>Login</p>
+    <form id = "loginForm">
+            <input type = "text" id="username" name="username" placeholder="User">
+            <div id="usernameError" class="error"></div>
+
+            <input type = "text" id="email" name="email" placeholder="Email">
+            <div id="emailError" class="error"></div>
+
+            <input type = "text" id="phonenumber" name="phonenumber" placeholder="Phone Number">
+            <div id="phonenumberError" class="error"></div>
+
+            <input type = "text" id="password" name="password" placeholder="Password">
+            <div id="passwordError" class="error"></div>
+
+            <div id="responseMessage" class="error"></div>
+            <button type = "submit">Login</button>
+            <p class = 'message'>Don't have an account? <a href="/Pages/createAccount.html">Create an account</a></p>
+    </form>
+</div>
+
+    <script>
+
+        document.getElementById("loginForm").addEventListener("submit", async function (e) {
+            e.preventDefault(); // Prevent default form submission
+            const username = document.getElementById("username").value;
+            const email = document.getElementById("email").value;
+            const phonenumber = document.getElementById("phonenumber").value;
+            const password = document.getElementById("password").value;
+
+            // Clear previous errors
+            document.getElementById("usernameError").innerText = "";
+            document.getElementById("passwordError").innerText = "";
+            document.getElementById("emailError").innerText = "";
+            document.getElementById("phonenumberError").innerText = "";
+            document.getElementById("responseMessage").innerText = "";
+
+            try {
+                const response = await fetch("http://localhost:4000/login", {
+                    method: "POST",
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ username, password, email, phonenumber})
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    document.getElementById("responseMessage").innerText = "Login successful! Redirecting...";
+                    // Redirect to the next page after 1 second
+                    setTimeout(() => { window.location.href = "/dashboard"; }, 1000);
+                } else {
+                    // Display specific errors
+                    if (result.errors.username) {
+                        document.getElementById("usernameError").innerText = result.errors.username;
+                    }
+                    if (result.errors.password) {
+                        document.getElementById("passwordError").innerText = result.errors.password;
+                    }
+                    if (result.errors.email) {
+                        document.getElementById("emailError").innerText = result.errors.email;
+                    }
+                    if (result.errors.phonenumber) {
+                        document.getElementById("phonenumberError").innerText = result.errors.phonenumber;
+                    }
+                    document.getElementById("responseMessage").innerText = "Login failed. Please check your input.";
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                document.getElementById("responseMessage").innerText = "An unexpected error occurred.";
+            }
+
+            // Reset form fields
+            document.getElementById("loginForm").reset();
+        });
+
+
+        const backgroundImage =
+        [
+            "/Images/Background2.jpg",
+            "/Images/Background1.jpeg",
+            "/Images/Background.jpg",
+            "/Images/Background3.jpg"
+        ]
+       const randomImage = backgroundImage[Math.floor(Math.random() * backgroundImage.length)];
+
+       document.body.style.backgroundImage = `url('${randomImage}')`;
+
+    </script>
+</body>
+
+    
+</html>
